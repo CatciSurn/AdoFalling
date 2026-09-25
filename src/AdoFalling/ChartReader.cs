@@ -262,7 +262,7 @@ namespace AdoFalling
                             Read(f, _floorHoldLength), Read(f, _floorSpeed)));
                     }
                 }
-                n.Color = (seq % 2 == 0) ? c.NoteColor.Value : c.NoteAltColor.Value;
+                n.Color = c.NoteColorValue;
                 n.Active = true;
                 n.Consumed = false;
                 _notes.Add(n);
@@ -350,7 +350,7 @@ namespace AdoFalling
                 // every 8th note is a hold, so the tail rendering is visible in DemoMode
                 if (i % 8 == 4)
                     n.HoldSeconds = beat * 2.0;
-                n.Color = (i % 2 == 0) ? c.NoteColor.Value : c.NoteAltColor.Value;
+                n.Color = c.NoteColorValue;
                 n.Active = true;
                 n.Consumed = false;
                 _notes.Add(n);
@@ -406,7 +406,7 @@ namespace AdoFalling
                 n.Lane = lane >= 0 ? lane : 0;
                 n.HoldSeconds = 0.0;
                 n.DistancePx = 0f;
-                n.Color = (k % 2 == 0) ? c.NoteColor.Value : c.NoteAltColor.Value;
+                n.Color = c.NoteColorValue;
                 n.Active = true;
                 n.Consumed = false;
                 _notes.Add(n);

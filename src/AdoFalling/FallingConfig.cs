@@ -58,8 +58,36 @@ namespace AdoFalling
         public readonly ConfigEntry<Color> LaneColor;
         public readonly ConfigEntry<Color> LaneEdgeColor;
         public readonly ConfigEntry<Color> JudgeColor;
-        public readonly ConfigEntry<Color> NoteColor;
+        public readonly ConfigEntry<string> NoteColor;
         public readonly ConfigEntry<Color> NoteAltColor;
+        private Color _noteColorCache = new Color(1f, 0f, 0f, 1f);
+        private string _noteColorCacheText;
+
+        /// <summary>
+        /// Note colour parsed from the config text. Accepts RGB like "255,0,0", hex like
+        /// "FF0000" / "#FF0000", optionally with a 4th alpha value ("255,0,0,128" or the
+        /// 8-digit hex "FF000080"). Invalid text falls back to red.
+        /// </summary>
+        public Color NoteColorValue
+        {
+            get
+            {
+                string text = NoteColor.Value;
+                if (text == _noteColorCacheText)
+                    return _noteColorCache;
+                _noteColorCacheText = text;
+                Color parsed;
+                if (TryParseNoteColor(text, out parsed))
+                    _noteColorCache = parsed;
+                else
+                {
+                    _noteColorCache = new Color(1f, 0f, 0f, 1f);
+                    FallingPlugin.Log.LogWarning("NoteColor: cannot read \"" + text +
+                        "\"; expected RGB like 255,0,0 or hex like FF0000. Using red.");
+                }
+                return _noteColorCache;
+            }
+        }
 public readonly ConfigEntry<float> LaneFlashStrength;
         public readonly ConfigEntry<float> JudgeFlashStrength;
 
@@ -193,8 +221,11 @@ public readonly ConfigEntry<float> LaneFlashStrength;
                 "Lane outline colour (alpha comes from LaneEdgeAlpha)");
             JudgeColor = f.Bind("Style", "JudgeLineColor", new Color(1f, 1f, 1f, 1f),
                 "Judgement line colour");
-            NoteColor = f.Bind("Style", "NoteColor", new Color(1f, 0.45f, 0.2f, 1f),
-                "Primary note colour");
+            NoteColor = f.Bind("Style", "NoteColor", "255,0,0",
+                "Note colour: RGB as R,G,B (0-255, e.g. 255,0,0) or hex as FF0000 / #FF0000. " +
+                "An optional 4th value sets alpha (e.g. 255,0,0,128 or FF000080). Suggested " +
+                "values - the original mod's red and blue: FF7333 (255,115,51) and " +
+                "66B2FF (102,178,255)");
             NoteAltColor = f.Bind("Style", "NoteAltColor", new Color(0.4f, 0.7f, 1f, 1f),
                 "Secondary note colour (alternates per tile)");
 
@@ -202,6 +233,38 @@ public readonly ConfigEntry<float> LaneFlashStrength;
                 "How bright the whole lane flashes on a hit (0 = off, 1 = full wash)");
             JudgeFlashStrength = f.Bind("Feedback", "JudgeFlashStrength", 0.85f,
                 "How bright the judgement line flashes on a hit (0 = off, 1 = full white)");
+        }
+
+        /// <summary>Parses "R,G,B[,A]" (0-255) or "#RRGGBB[AA]" ("#" optional).</summary>
+        private static bool TryParseNoteColor(string text, out Color color)
+        {
+            color = new Color(1f, 0f, 0f, 1f);
+            if (string.IsNullOrEmpty(text))
+                return false;
+            text = text.Trim();
+            if (text.Length == 0)
+                return false;
+
+            if (text.IndexOf(',') >= 0)
+            {
+                string[] parts = text.Split(',');
+                if (parts.Length != 3 && parts.Length != 4)
+                    return false;
+                float[] v = new float[] { 0f, 0f, 0f, 1f };
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    int n;
+                    if (!int.TryParse(parts[i].Trim(), out n) || n < 0 || n > 255)
+                        return false;
+                    v[i] = n / 255f;
+                }
+                color = new Color(v[0], v[1], v[2], v[3]);
+                return true;
+            }
+
+            if (text[0] != '#')
+                text = "#" + text;
+            return ColorUtility.TryParseHtmlString(text, out color);
         }
     }
 }

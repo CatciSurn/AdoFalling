@@ -326,7 +326,8 @@ AudioManager.Play("snd" + hitSound, AudioSettings.dspTime + 0.02, conductor.hitS
 | Style | `LaneEdgeAlpha` | `0.7` | 轨道边框透明度（轨道"看得见"主要靠它） |
 | Style | `JudgeLineOpacity` | `1` | 判定线透明度 |
 | Style | `NoteOpacity` | `1` | 按键透明度 |
-| Style | `LaneColor` / `LaneEdgeColor` / `JudgeLineColor` / `NoteColor` / `NoteAltColor` | — | 颜色（`RRGGBBAA`） |
+| Style | `LaneColor` / `LaneEdgeColor` / `JudgeLineColor` / `NoteAltColor` | — | 颜色（`RRGGBBAA`） |
+| Style | `NoteColor` | `255,0,0` | 音符颜色，支持 RGB（`R,G,B`，0-255）或十六进制（`FF0000` / `#FF0000`）；可选第 4 个值设置透明度（如 `255,0,0,128` 或 `FF000080`）。推荐原 mod 的红 `FF7333`（`255,115,51`）和蓝 `66B2FF`（`102,178,255`） |
 
 > 关于「主要判定线与发射的按键和轨道不透明，其他透明」：
 > 判定线、轨道边框、按键默认都是不透明（alpha = 1）；轨道底默认 `0.18` 半透明，

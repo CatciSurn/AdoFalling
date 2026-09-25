@@ -254,7 +254,7 @@ namespace AdoFalling
                 {
                     if (Math.Abs(_visible[i].DistancePx) < pxPerSec * dt * 1.5f)
                     {
-                        SpawnEffect(_visible[i].Lane, "HIT", _cfg.NoteColor.Value);
+                        SpawnEffect(_visible[i].Lane, "HIT", _cfg.NoteColorValue);
                         break;
                     }
                 }
@@ -483,7 +483,7 @@ namespace AdoFalling
         private static Color GradeColor(string grade, FallingConfig cfg)
         {
             if (string.IsNullOrEmpty(grade))
-                return cfg.NoteColor.Value;
+                return cfg.NoteColorValue;
             if (grade == "Perfect" || grade == "EarlyPerfect" || grade == "LatePerfect")
                 return new Color(1f, 0.95f, 0.45f, 1f);
             if (grade == "Auto")
