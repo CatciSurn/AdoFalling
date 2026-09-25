@@ -14,7 +14,6 @@
 | 加载器 | BepInEx 5.4.23.5（已装到游戏目录，用 `version.dll` 作 Doorstop 代理） |
 | 插件 | `BepInEx\plugins\AdoFalling.dll`（已安装） |
 | 实机验证 | 插件加载 ✅、反射绑定 ✅、叠加层渲染 ✅、读谱（168 音符）✅、下落时间轴 ✅、判定钩子 ✅ |
-| 待确认 | 在**真实关卡**里跟谱面的时间/手感对齐，以及打中时的判定动画（需实际演奏） |
 
 ### 验证截图
 
@@ -100,7 +99,7 @@
 
 鼠标若可用也可以直接拖滑块、点输入框、点按钮；两种方式都能用。
 
-### 谱面文件模式 —— 完全复刻 ReADOFAIMacro 的按键（`Chart/FilePath` + `F`）
+### 谱面文件模式 —— 完全复刻 [ReADOFAIMacro](https://github.com/TonyLimps/ReADOFAIMacro) 的按键（`Chart/FilePath` + `F`）
 
 这是现在的主用方式，读谱辅助**只依赖谱面文件**，不需要读取游戏当前的关卡：
 
